@@ -5,7 +5,9 @@ from pymongo import MongoClient
 
 mongostr = ""
 client = MongoClient(mongostr, serverSelectionTimeoutMS=60000)
-db = client['HacksForU']
+DB = client['HacksForU']
+from certificate import *
+
 
 def list_to_string(input_list):
     result = ""
@@ -101,7 +103,7 @@ def create_roadmap(state):
     Description = state.roadmapDesc
     Image = state.roadmapimage
     Link = state.roadmapLink
-    Roadmaps = db["Roadmaps"]
+    Roadmaps = DB["Roadmaps"]
     new_roadmap = {
         "Title": Title,
         "Description": Description,
@@ -115,7 +117,7 @@ def create_FreeStuff(state):
     Description = state.resourceDesc
     Image = state.resourceimage
     Link = state.resourceLink
-    FreeStuff = db["FreeStuff"]
+    FreeStuff = DB["FreeStuff"]
     new_stuff = {
         "Title": Title,
         "Description": Description,
@@ -129,7 +131,7 @@ def create_courses(state):
     Description = state.courseDesc
     Image = state.courseimage
     Link = state.courseLink
-    Courses = db["Courses"]
+    Courses = DB["Courses"]
     new_course = {
         "Title": Title,
         "Description": Description,
@@ -235,19 +237,15 @@ image_url = ""
 User_id = ""
 Cert_id = ""
 mint_progress = ""
+minter_address="0xf8d6e0586b0a20c7"
+
+img=''
+crt_name=''
+name=''
+desc=''
 
 
 
-
-
-
-
-
-def Mint():
-    pass
-
-def Retrieve():
-    pass
 
 page_5 = """
 
@@ -262,6 +260,7 @@ page_5 = """
 <|{Cert_name}|input|label=Enter Certification name|><br />
 <|{Cert_desc}|input|label=Tell us about it|><br />
 <|{image_url}|input|label=Enter the Certification image url|><br />
+<| {image_url}|><br />
 <|Mint|button|on_action=Mint|>
 
 <|{mint_progress}|>
@@ -269,10 +268,39 @@ page_5 = """
 
 <|Find Your NFT|expandable|expanded=False|
 <|{User_id}|input|label=Enter your Flow Account address|><br />
-<|{Cert_id}|input|label=Enter your Certification address|><br />
+<|{Cert_id}|input|label=Enter a Certification ID|><br />
 <|Retrieve|button|on_action=Retrieve|><br />
 |>
+## <|{name}|><br />
+## <|{crt_name}|><br />
+## <|{desc}|><br />
+## <|{img}|><br />
 """
+
+
+def Mint(state):
+    print(state.User_address)
+    metadata = {"Name": state.User_name,
+            "Cert_name": state.Cert_name,
+            "Desc": state.Cert_desc,
+            "img": state.image_url
+            }
+    # createCollection(state.User_address, name='Moiz')
+    b = MintCert(minter_address, state.User_address, metadata)
+
+    asyncio.run(b.run(ctx = Config(r"C:\Users\moizp\Documents\projects\hacks4u\flow.json", 'emulator-account')))
+
+    mint_progress="Success!"
+    
+
+def Retrieve(state):
+    my_data = retriveData(state.User_id,state.Cert_id)
+    state.name = my_data['Name']
+    state.img=my_data['img']
+    state.desc=my_data['Desc']
+    state.crt_name=my_data['Cert_name']
+    
+        
 
 def on_menu(state, var_name, function_name, info):
     page = info['args'][0]
