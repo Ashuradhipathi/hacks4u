@@ -156,6 +156,12 @@ Cert_id = ""
 mint_progress = ""
 minter_address="0xf8d6e0586b0a20c7"
 
+img=''
+crt_name=''
+name=''
+desc=''
+
+
 
 
 page_5 = """
@@ -182,6 +188,10 @@ page_5 = """
 <|{Cert_id}|input|label=Enter a Certification ID|><br />
 <|Retrieve|button|on_action=Retrieve|><br />
 |>
+## <|{name}|><br />
+## <|{crt_name}|><br />
+## <|{desc}|><br />
+## <|{img}|><br />
 """
 
 
@@ -202,7 +212,11 @@ def Mint(state):
 
 def Retrieve(state):
     my_data = retriveData(state.User_id,state.Cert_id)
-    print(my_data)
+    state.name = my_data['Name']
+    state.img=my_data['img']
+    state.desc=my_data['Desc']
+    state.crt_name=my_data['Cert_name']
+    
         
 
 def on_menu(state, var_name, function_name, info):
