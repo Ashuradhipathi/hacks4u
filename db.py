@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-mongostr = "mongodb+srv://Fellowship:1A7oialpAswV5I2B@cluster0.ub5pbd6.mongodb.net/?retryWrites=true&w=majorityS"
+mongostr = ""
 client = MongoClient(mongostr, serverSelectionTimeoutMS=60000)
 db = client['HacksForU']
 
