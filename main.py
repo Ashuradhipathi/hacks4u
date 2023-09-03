@@ -1,12 +1,17 @@
 from taipy.gui import Gui, navigate
-import db
+import DB
 
+from pymongo import MongoClient
+
+mongostr = ""
+client = MongoClient(mongostr, serverSelectionTimeoutMS=60000)
+db = client['HacksForU']
 
 def list_to_string(input_list):
     result = ""
-    for item in input_list:
-        result += str(item) + "\n\n"
+    result = "\n".join( input_list)
     return result
+
 
 
 
@@ -17,17 +22,31 @@ page_1 =  """
 
 <|layout|columns= 2 2 2 1 1|
 
-<|#Resources
+<|
 
-*Resources*|>
+#Resources
+"Student offers" typically refer to discounts, promotions, or special deals specifically designed for students. These offers are a way for businesses, educational institutions, and various service providers to support students and make their products or services more accessible
+|>
 
-<|#Courses|>
+<|
+#Courses<br />
+Free course websites are invaluable resources for learners of all ages and backgrounds. These platforms offer a wide range of educational content at no cost, making quality learning accessible to anyone with an internet connection
+|>
 
-<|#Roadmaps|>
+<|
+#Roadmaps<br />
+Roadmaps are strategic plans or visual representations that outline the key steps, milestones, and goals necessary to achieve a specific objective, project, or journey. Roadmaps are used in various contexts, including business, project management, product development, and personal development
+|>
 
-<|#Github|>
+<|
+#Github<br />
+Contributions are actions or efforts made by individuals or groups to enhance, improve, or make a positive impact on various aspects of society, organizations, or projects. Contributions can take many forms and play a crucial role in personal development, community building, and the progress of society.
+|>
 
-<|#Taipy Documentation|>
+<|
+#Taipy Documentation<br />
+Taipy is used to build it, so we thought it will be useful. 
+|>
 
 
 |>
@@ -36,7 +55,7 @@ page_1 =  """
 course_title = []
 course_desc = []
 course_link = []
-courses_ = db.show_courses()
+courses_ = DB.show_courses()
 for course in courses_:
     course_title.append(course['Title'])
     course_desc.append(course['Description'])
@@ -68,13 +87,61 @@ page_2 = """
 
 |> 
 |>
+<|Add Sources for Courses |expandable|expanded=False|
+<|{courseTitle}|input|label=Enter Title|><br />
+<|{courseDesc}|input|label= Enter Description|><br />
+<|{courseimage}|input|label=Enter image url|><br />
+<|{courseLink}|input|label=Enter webiste url|><br />
+<|Submit|button|on_action=create_courses|><br />
+|>
 """
 
+def create_roadmap(state):
+    Title = state.roadmapTitle
+    Description = state.roadmapDesc
+    Image = state.roadmapimage
+    Link = state.roadmapLink
+    Roadmaps = db["Roadmaps"]
+    new_roadmap = {
+        "Title": Title,
+        "Description": Description,
+        "Image" : Image,
+        "Link": Link        
+        }
+    Roadmaps.insert_one(new_roadmap)
+
+def create_FreeStuff(state):
+    Title = state.resourceTitle
+    Description = state.resourceDesc
+    Image = state.resourceimage
+    Link = state.resourceLink
+    FreeStuff = db["FreeStuff"]
+    new_stuff = {
+        "Title": Title,
+        "Description": Description,
+        "image" : Image,
+        "Link": Link        
+    }
+    FreeStuff.insert_one(new_stuff)
+
+def create_courses(state):
+    Title = state.courseTitle
+    Description = state.courseDesc
+    Image = state.courseimage
+    Link = state.courseLink
+    Courses = db["Courses"]
+    new_course = {
+        "Title": Title,
+        "Description": Description,
+        "image" : Image,
+        "Link": Link        
+    }
+    Courses.insert_one(new_course)
 
 resource_title = []
 resource_desc = []
 resource_link = []
-resources_ = db.show_FreeStuff()
+resources_ = DB.show_FreeStuff()
 for resource in resources_:
     resource_title.append(resource['Title'])
     resource_desc.append(resource['Description'])
@@ -106,13 +173,20 @@ page_3 = """
 
 |> 
 |>
+<|Add Resources |expandable|expanded=False|
+<|{resourceTitle}|input|label=Enter Title|><br />
+<|{resourceDesc}|input|label= Enter Description|><br />
+<|{resourceimage}|input|label=Enter image url|><br />
+<|{resourceLink}|input|label=Enter webiste url|><br />
+<|Submit|button|on_action=create_FreeStuff|><br />
+|>
 """
 
 
 Roadmaps_title = []
 Roadmaps_desc = []
 Roadmaps_link = []
-Roadmaps_ = db.show_roadmaps()
+Roadmaps_ = DB.show_roadmaps()
 for roadmap in Roadmaps_:
     Roadmaps_title.append(roadmap['Title'])
     Roadmaps_desc.append(roadmap['Description'])
@@ -143,6 +217,13 @@ page_4 = """
 
 
 |> 
+|>
+<|Add Sources for Resources |expandable|expanded=False|
+<|{roadmapTitle}|input|label=Enter Title|><br />
+<|{roadmapDesc}|input|label= Enter Description|><br />
+<|{roadmapimage}|input|label=Enter image url|><br />
+<|{roadmapLink}|input|label=Enter webiste url|><br />
+<|Submit|button|on_action=create_roadmap|><br />
 |>
 """
 
