@@ -1,6 +1,6 @@
 from taipy.gui import Gui, navigate
 
-index = """<|navbar|>"""
+index = """"<|menu|label=Menu|lov={[('Page-1', 'Page 1'), ('Page-2', 'Page 2')]}|on_action=on_menu|>"""
 page_1 =  """
 #TAIPY GUI TUTORIALS - Layouts
 
@@ -41,10 +41,13 @@ Button 2:
 Button 3:  
 
 
-|>
+|> 
 |>
 """
 
+def on_menu(state, var_name, function_name, info):
+    page = info['args'][0]
+    navigate(state, to=page)
 
 if __name__ == '__main__':
     pages = {

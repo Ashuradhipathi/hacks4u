@@ -50,4 +50,3 @@ def create_courses(Title,Description,Image,Link):
     }
     Courses.insert_one(new_course)
 
-
