@@ -17,7 +17,9 @@ page_1 =  """
 
 <|layout|columns= 2 2 2 1 1|
 
-<|#Resources|>
+<|#Resources
+
+*Resources*|>
 
 <|#Courses|>
 
