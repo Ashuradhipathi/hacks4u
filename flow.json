@@ -1,4 +1,7 @@
 {
+	"contracts": {
+		"MyCert": "contract.cdc"
+	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
 		"mainnet": "access.mainnet.nodes.onflow.org:9000",
@@ -6,6 +9,11 @@
 		"testnet": "access.devnet.nodes.onflow.org:9000"
 	},
 	"accounts": {
+		
+		"Moiz": {
+			"address": "e03daebed8ca0615",
+			"key": "9fb53014c877f450615f61155c096b8b6f8105568db8b12f39c010909834ce7a"
+		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "1765f2c779811561a1135cbca5ce2f90417de90904fb7373f3fe2bef62a1c8e0"

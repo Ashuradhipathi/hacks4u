@@ -4,8 +4,7 @@ import logging
 from pathlib import Path
 import asyncio
 from flow_py_sdk.cadence import Address, Dictionary, String, KeyValuePair, UInt64, Struct,Value
-from flow_py_sdk.signer import InMemorySigner, HashAlgo, SignAlgo, in_memory_signer
-from flow_py_sdk.account_key import SigningKey, AccountKey
+from flow_py_sdk.signer import InMemorySigner, HashAlgo, SignAlgo
 from typing import List
 
 
@@ -162,7 +161,7 @@ transaction(recipient: Address, metadata : {String: String}) {
 
         receiverRef.deposit(token: <-newNFT, metadata: metadata)
 
-      log("Certificate Minted and deposited to Account 2's Collection")
+      log("Certificate Minted and deposited to Account's Collection")
     }
 }
                 """,
@@ -191,15 +190,13 @@ transaction(recipient: Address, metadata : {String: String}) {
             )
         )
             
-# a = CreateCollection('0xe03daebed8ca0615')
-# asyncio.run(a.run(ctx = Config(r"C:\Users\moizp\Documents\projects\certifyweb3\flow.json", 'Moiz')))
-# b = MintCert('0xf8d6e0586b0a20c7', '0xe03daebed8ca0615', {"working": "Hopefully", "Something": "else"})
-# asyncio.run(b.run(ctx = Config(r"C:\Users\moizp\Documents\projects\certifyweb3\flow.json", 'emulator-account')))
+
 
 
 class RetrieveMetadata():
-    def __init__(self, receiver: Address) -> None:
+    def __init__(self, receiver: Address, id: int) -> None:
         self.receiver_address = Address.from_hex(receiver)
+        self.id=id
 
     async def run(self, ctx: Config):
         script = Script(
@@ -225,7 +222,7 @@ pub fun main(account: Address, certID: UInt64) : {String: String} {
     return receiverRef.getMetadata(id:certID)
 }
                 """,
-            arguments=[self.receiver_address, UInt64(8)],
+            arguments=[self.receiver_address, UInt64(self.id)],
         )
 
         async with flow_client(
@@ -241,7 +238,24 @@ pub fun main(account: Address, certID: UInt64) : {String: String} {
                 raise Exception("Script execution failed")
 
             script_result: Value = complex_script
+            m = script_result.as_type(Dictionary).value
+            result = {}
+            for obj in m:
+                result[str(obj.key)]=str(obj.value)
+            print(result)
+            return result
+            
 
-            print("Key: "+ str(script_result.as_type(Dictionary)))
-c = RetrieveMetadata('0xe03daebed8ca0615')
-asyncio.run(c.run(ctx = Config(r"C:\Users\moizp\Documents\projects\certifyweb3\flow.json", 'emulator-account')))
+
+
+            
+# a = CreateCollection('0xe03daebed8ca0615')
+# asyncio.run(a.run(ctx = Config(r"C:\Users\moizp\Documents\projects\hacks4u\flow.json", 'Moiz')))
+
+
+# b = MintCert('0xf8d6e0586b0a20c7', '0xe03daebed8ca0615', {"Name": "Moiz"})
+
+# asyncio.run(b.run(ctx = Config(r"C:\Users\moizp\Documents\projects\hacks4u\flow.json", 'emulator-account')))
+
+# c = RetrieveMetadata('0xe03daebed8ca0615', 1)
+# asyncio.run(c.run(ctx = Config(r"C:\Users\moizp\Documents\projects\hacks4u\flow.json", 'emulator-account')))
