@@ -14,11 +14,12 @@ index = """"<|menu|label=Menu|lov={[('Page-1', 'Home'), ('Page-2', 'Courses'), (
 page_1 =  """
 #Hacks For U
 
-<|Expandable Description|expandable|expanded=False|
-##How does it work? 
+
 <|layout|columns= 2 2 2 1 1|
 
-<|#Resources|>
+<|#Resources
+
+*Resources*|>
 
 <|#Courses|>
 
@@ -29,7 +30,6 @@ page_1 =  """
 <|#Taipy Documentation|>
 
 
-|>
 |>
 """
 
@@ -146,11 +146,52 @@ page_4 = """
 |>
 """
 
+User_address = ""
+User_name = ""
+Cert_name = ""
+Cert_desc = ""
+image_url = ""
+User_id = ""
+Cert_id = ""
+mint_progress = ""
+
+
+
+
+
+
+
+
+def Mint():
+    pass
+
+def Retrieve():
+    pass
+
 page_5 = """
 
-# Certificates NFt Mint
 
-<|file_selector|label=Enter The Certificate|>"""
+
+<|Create Mint|expandable|expanded=True|
+# Certificates NFT Mint
+
+
+<|{User_address}|input|label=Enter your Flow Account address|><br />
+<|{User_name}|input|label=Enter your name|><br />
+<|{Cert_name}|input|label=Enter Certification name|><br />
+<|{Cert_desc}|input|label=Tell us about it|><br />
+<|{image_url}|input|label=Enter the Certification image url|><br />
+<|Mint|button|on_action=Mint|>
+
+<|{mint_progress}|>
+|>
+
+<|Find Your NFT|expandable|expanded=False|
+<|{User_id}|input|label=Enter your Flow Account address|><br />
+<|{Cert_id}|input|label=Enter your Certification address|><br />
+<|Retrieve|button|on_action=Retrieve|><br />
+|>
+"""
 
 def on_menu(state, var_name, function_name, info):
     page = info['args'][0]
