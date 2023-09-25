@@ -3,9 +3,9 @@ import DB
 
 from pymongo import MongoClient
 
-mongostr = ""
+mongostr = "mongodb+srv://Fellowship:1A7oialpAswV5I2B@cluster0.ub5pbd6.mongodb.net/?retryWrites=true&w=majorityS"
 client = MongoClient(mongostr, serverSelectionTimeoutMS=60000)
-DB = client['HacksForU']
+db = client['HacksForU']
 from certificate import *
 
 
